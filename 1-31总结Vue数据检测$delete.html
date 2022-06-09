@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title></title>
+		<!-- 引入VUE -->
+        <script src="./js/vue.js"></script>
+	</head>
+	<body>
+		<!--	 
+			vue监视数据的原理：
+				1.vue会监视data中所有层次的数据
+				2.如何监视对象中的数据？
+					通过setter实现监视，且要在new Vue时传入要检测的数据
+						1.对象中后追加的属性，vue默认不做响应式处理
+						2.如需还给后添加的属性做响应式，请用如下api
+							Vue.set(target,propertyName/index,value) 或
+							this.$set(target,propertyName/index,value)
+				3.如何检测数组中的数据
+					通过包裹数组更新元素的方法实现，本质就是做了两件事
+						1，调用原生对应的方法对数组进行更新
+						2.重新解析模板，进而更新页面
+				4.在vue修改数组中的某些元素一定要用以下方法
+					pop push shift unshift splice sort reverse
+					Vue.set()   this.$set()
+				特别注意：Vue.set() 和 this.$set() 不能给vm 或者 vm的跟数据对象添加属性！！！！
+
+
+				// 两种删除属性的写法
+				this.$delete  删除属性
+				Vue.delete    删除属性
+		 -->
+		<div id="root">
+			<button @click="student.age++">年龄+1岁</button>
+			<button @click="addSex">添加性别属性：默认男</button>
+			<button @click="addFriends">在列表首位添加一个朋友</button>
+			<button @click="updata">修改第一个朋友的名字为：张三</button>
+			<button @click="addH">添加一个爱好</button>
+			<button @click="upH">修改一个爱好为：开车</button>
+			<button @click="removeH">过滤掉抽烟</button>
+			<hr>
+			<h3>名字：{{student.name}}</h3>
+			<h3>年龄：{{student.age}}</h3>
+			<h3 v-if="student.sex">性别：{{student.sex}}</h3>
+			<p>爱好：</p>
+			<ul>
+				<li v-for="(item,index) in student.hobby">
+					{{item}}
+				</li>
+			</ul>
+			<ul>
+				<p>他的朋友们：</p>
+				<li v-for="(item,index) in student.friends" :key="index">
+					{{item.name}}--{{item.age}}
+				</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			Vue.config.productionTip = false;// 阻止vue在启动时生成生产提示
+			const vm = new Vue({
+				el:"#root",
+				data:{
+					student:{
+						name:'tom',
+						age:18,
+						hobby:[
+							'抽烟','烫头','喝酒'
+						],
+						friends:[
+							{name:'jerry',age:21},
+							{name:'tony',age:22}
+						]
+					}
+				},
+				methods: {
+					addSex(){
+						// Vue.set(this.student,'sex','男')
+						this.$set(this.student,'sex','男')
+					},
+					addFriends(){
+						this.student.friends.unshift({name:'哈哈',age:30});
+					},
+					updata(){
+						this.student.friends[0].name = '张三'
+						// this.student.friends.splice(0,1,{name:'张三',age:30})
+					},
+					addH(){
+						this.student.hobby.push('打豆豆');
+					},
+					upH(){
+						this.student.hobby.splice(0,1,'开车')
+						// Vue.set(this.student.hobby,0,'开车')
+					},
+					removeH(){
+						// 当使用非变更方法时，可以用新数组替换旧数组
+						this.student.hobby = this.student.hobby.filter((h)=>{
+							return h !== '抽烟'
+						})
+					}
+				},
+			})
+		</script>
+	</body>
+</html>

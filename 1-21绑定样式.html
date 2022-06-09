@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- 引入VUE -->
+        <script src="./js/vue.js"></script>
+        <style>
+            .red{
+                width: 100px;
+                height: 100px;
+                border: 1px solid red;
+            }
+            .blue{
+                background-color: blue;
+            }
+            .padd{
+                border: 10px solid green;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 
+            1.class样式
+                写法：class='xxx'   xxx可以是字符串，对象，数组
+                    字符串：写法适用于：类名不确定，要动态获取
+                    对象写法适用于：要绑定多个样式，个数不确定，名字也不确定
+                    数组写法适用于：要绑定多个样式，个数确定，名字也确定，但不确定用不用
+            2.style样式
+                ：style='{fontSize:xxx}'其中xxx是动态值
+                ：style='[a,b]'其中a,b是样式对象
+         -->
+        <div id="root">
+            <!-- 绑定class样式--字符串写法  适用于：样式的类型不确定，需要动态指定 -->
+            <div class="red" :class="mood" @click="changeMood">text</div><br>
+
+            <!-- 绑定class样式--数组写法  适用于：要绑定的样式个数不确定，名字也不确定 -->
+            <div class="red" :class="classArr" @click="changeMood">text</div><br>
+
+            <!-- 绑定class样式--对象写法  适用于：要绑定的样式确定，名字也确定，但要动态的决定要不要 -->
+            <div class="red" :class="classObj" @click="changeMood">text</div><br>
+
+            <div class="red" :style="{fontSize:fsize+'px'}">text</div><br>
+            <!-- 绑定style样式，对象写法 -->
+            <div class="red" :style="styleObj">text</div><br>
+            <div class="red" :style="[styleObj,styleObj2]">text</div><br>
+            <!-- 绑定style样式，数组写法 -->
+            <div class="red" :style="styleArr">text</div><br>
+        </div>
+        <script>
+            Vue.config.productionTip = false;// 阻止vue在启动时生成生产提示
+            const vm = new Vue({
+                el:"#root",
+                data:{
+                    mood:'blue',
+                    classArr:['a','b','c'],
+                    classObj:{
+                        a:false,
+                        b:true
+                    },
+                    fsize:40,
+                    styleObj:{
+                        fontSize:'40px'
+                    },
+                    styleObj2:{
+                        backgroundColor:'pink'
+                    },
+                    styleArr:[
+                        {
+                            fontSize:'50px'
+                        },
+                        {
+                            backgroundColor:'blue'
+                        }
+                    ]
+                },
+                methods: {
+                    changeMood(){
+                        const arr = ['red','blue','padd']
+                        const index = Math.floor(Math.random()*3)
+                        this.mood = arr[index];
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

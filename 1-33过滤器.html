@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- 引入VUE -->
+        <script src="./js/vue.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/dayjs/1.11.0/dayjs.min.js"></script>
+    </head>
+    <body>
+        <!-- 
+            过滤器：
+                定义：对要显示的数据进行特定格式化后再显示（适用于一些简单逻辑的处理）
+                语法：
+                    1.注册过滤器：Vue.filter(name,callback) 或 new Vue(filter:{})
+                    2.使用过滤器：{{xxx || 过滤器名字}} 或 v-bind:属性=“xxx | 过滤器名字”
+                备注：
+                    1.过滤器也可以接收额外参数，多个过滤器也可以串联
+                    2.并没有改变原本的数据，是产生新的对应的数据
+         -->
+        <div id="root">
+            <h2>显示格式化后的时间</h2>
+            <h2>现在的时间是：{{time}}</h2>
+            <h2>computed实现:{{fmtTime}}</h2>
+            <!-- methods事件中回调可以不加小括号（）  {{差值语法中必须加（）}} -->
+            <h2>methods实现:{{getFmtTime()}}</h2>
+            <!-- 过滤器实现 -->
+            <h2>filter实现：{{time | timeFilter}}</h2>
+            <!-- 过滤器传参(传参) -->
+            <h2>filter传参实现：{{time | timeFilter('YYYY_MM_DD')}}</h2>
+            <h2>filter多个过滤器串联实现：{{time | timeFilter('YYYY_MM_DD') | myslice}}</h2>
+        </div>
+        <script>
+            Vue.config.productionTip = false;// 阻止vue在启动时生成生产提示
+
+            // 全局过滤器  默认收到value
+            Vue.filter('myslice',function(value){
+                return value.slice(0,4)
+            })
+
+
+            const vm = new Vue({
+                el:'#root',
+                data:{
+                    // Date.parse(new Date())  获取时间戳
+                    time: Date.parse(new Date())
+                },
+                methods: {
+                    getFmtTime(){
+                        return dayjs(this.time).format('YYYY年MM月DD日 HH:mm:ss');
+                    }
+                },
+                computed:{
+                    fmtTime(){
+                        // return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss');
+                        return dayjs(this.time).format('YYYY年MM月DD日 HH:mm:ss');
+                    }
+                },
+                filters: {
+                    // 局部过滤器  默认收到value
+                    timeFilter(value,str='YYYY年MM月DD日 HH:mm:ss'){
+                        console.log(value);// 这里的value接收到是  time
+                        return dayjs(value).format(str);
+                    },
+                    // myslice(value){
+                    //     return value.slice(0,4)
+                    // }
+                }
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title></title>
+		<!-- 引入VUE -->
+        <script src="./js/vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			<h2>学校信息</h2>
+			<h3>学校名称：{{school.name}}</h3>
+			<h3>学校地址：{{school.address}}</h3>
+			<hr>
+			<button @click="addSex">点击添加一个性别属性，默认是男</button>
+			<h3>名字：{{school.student.name}}</h3>
+			<h3>年龄：{{school.student.age.rage}}--{{school.student.age.sage}}</h3>
+			<h3 v-if="school.student.sex">性别：{{school.student.sex}}</h3>
+			<p>爱好：</p>
+			<button @click="addHobby">点击添加爱好</button>
+			<button @click="upHobby">点击修改下标为1的爱好</button>
+			<ul>
+				<li v-for="(item,index) in school.student.hobby">
+					{{item}}
+				</li>
+			</ul>
+			<ul>
+				<p>他的朋友们：</p>
+				<li v-for="(item,index) in school.student.friends" :key="index">
+					{{item.name}}--{{item.age}}
+				</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			Vue.config.productionTip = false;// 阻止vue在启动时生成生产提示
+			const vm = new Vue({
+				el:"#root",
+				data:{
+					school:{
+						name:'清华大学',
+						address:'北京',
+						student:{
+							name:'tom',
+							age:{
+								rage:18,
+								sage:20
+							},
+							hobby:[
+								'抽烟','烫头','喝酒'
+							],
+							friends:[
+								{name:'jerry',age:21},
+								{name:'tony',age:22}
+							]
+						}
+					}
+				},
+				methods: {
+					addSex(){
+						// Vue.set(this.school.student,'sex','男')
+						this.$set(this.school.student, 'sex', '女')
+					},
+					addHobby(){
+						// 往数组里面添加要使用vue专用的数组方法
+						// push pop shift unshift splice sort reverse filter concat slice
+						this.school.student.hobby.push('打台球')
+					},
+					upHobby(){
+						this.$set(this.school.student.hobby,1,'打豆豆')
+					}
+				},
+			})
+		</script>
+	</body>
+</html>

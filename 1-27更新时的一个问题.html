@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title></title>
+		<!-- 引入VUE -->
+        <script src="./js/vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			<h2>人员列表</h2>
+			<!-- 遍历数组 -->
+			<button @click="updateDong">点击更改周冬雨信息</button>
+			<ul>
+				<li v-for="(item,index) in persons" :key='item.id'>
+					{{item.name}}-{{item.age}}-{{index}}-{{item.sex}}
+				</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			Vue.config.productionTip = false;// 阻止vue在启动时生成生产提示
+			const vm = new Vue({
+				el:"#root",
+				data:{
+					persons:[
+						{id:'001',name:'周冬雨',age:30,sex:'女'},
+						{id:'002',name:'周杰伦',age:19,sex:'男'},
+						{id:'003',name:'温兆伦',age:20,sex:'男'},
+						{id:'004',name:'马冬梅',age:40,sex:'女'}
+					]
+				},
+				methods: {
+					updateDong(){
+						// this.persons[0].name = '马邦德';//奏效
+						// this.persons[0].age = 50;//奏效
+						// this.persons[0].sex = '男';//奏效
+
+						// 这种是赋值
+						// this.persons[0] = {id:'001',name:'马邦德',age:333,sex:'男'}// vue检测不到，不会被修改
+
+						// 添加数组数据时用VUE专门的数组方法
+						this.persons.splice(0,1,{id:'001',name:'马邦德',age:333,sex:'男'}) //奏效
+					}
+				},
+			})
+		</script>
+	</body>
+</html>

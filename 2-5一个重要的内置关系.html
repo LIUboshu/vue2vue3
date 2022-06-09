@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- 引入VUE -->
+        <script src="./js/vue.js"></script>
+    </head>
+    <body>
+        <!-- 
+            1.一个重要的内置关系：VueComponent.prototype.__proto__ === Vue.prototype
+            2.为什么要有这个关系：让组件实例对象vc 可以访问到 Vue原型上的属性、方法
+         -->
+        <div id="root">
+            <school></school>
+        </div>
+        <script>
+            Vue.config.productionTip = false;// 阻止vue在启动时生成生产提示
+            Vue.prototype.y = 88;//在构造函数Vue的原型上添加 y : 88
+
+            const school = Vue.extend({
+                name:'xuexiao',
+                template:`
+                    <div>
+                        <h2>学校名字：{{schoolName}}</h2>
+                        <h2>学校地址：{{schoolAddress}}</h2>
+                        <button @click='showName'>点我提示学校名字</button>
+                    </div>
+                `,
+                data() {
+                    return {
+                        schoolName:'清华',
+                        schoolAddress:'北京'
+                    }
+                },
+                methods: {
+                    showName(){
+                        console.log(this.schoolName);
+                        console.log(this);//VueComponent
+                        console.log(this.__proto__.__proto__.x);//99
+                        console.log(this.x);//99
+                        console.log(this.y);//88
+                        console.log(this.__proto__.__proto__.y === vm.__proto__.y);//true
+                        console.log(this.__proto__.__proto__.y === Vue.prototype.y);//true
+                    }
+                }
+            }) 
+            // VueComponent.prototype.__proto__ === Vue.prototype 
+            console.log(school.prototype.__proto__ === Vue.prototype);//true
+            console.log(school.prototype.__proto__.x === Vue.prototype.x);//true
+            
+            
+            var vm = new Vue({
+                el:'#root',
+                data:{
+
+                },
+                components:{
+                    school
+                }
+            })
+            //  vm 实例对象 通过__proto__往Vue原型上添加  x ： 99 
+            vm.__proto__.x = 99;
+            console.log(school.prototype.__proto__.x === vm.__proto__.x);//true
+
+        </script>
+    </body>
+</html>

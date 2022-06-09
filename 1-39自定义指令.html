@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- 引入VUE -->
+        <script src="./js/vue.js"></script>
+    </head>
+    <body>
+        <!-- 
+            自定义指令总结：
+                1.定义语法：
+                    1，局部指令：
+                        new Vue({
+                            directives:{指令名：配置对象}
+                        })
+                        new Vue({
+                            directives(){}
+                        })
+                    2.全局指令：
+                        Vue.directive(指令名，配置对象)
+                        Vue.directive(指令名，回调函数)
+                2.配置对象中常用用的3个回调
+                        bind:指令与元素成功绑定时调用
+                        inserted：指令所在元素被插入页面时调用
+                        update:指令所在模板结构被重构解析时调用
+                3.备注：
+                        1.指令定义时不加v  使用时要加 v-
+                        2.指令名如果是多个单词，要使用kebab-case命名方式，不要使用kebabCase命名
+
+        -->
+        <!-- 需求1：定义一个v-big指令，和v-text功能类似，但会把绑定的数值放大10倍 -->
+        <!-- 需求2：定义一个v-fbing指令，和v-bing功能类似，但可以让其所绑定的input元素默认获取焦点 -->
+        <div id="root">
+            <p>{{name}}</p>
+            <p v-text="name"></p>
+            <p v-big="n">{{n}}</p>
+            <p v-big-number="n">{{n}}</p>
+            <!-- 全局指令 函数 -->
+            <p v-big2="n">{{n}}</p>
+            <button @click="n++">点击n的10倍</button>
+            <hr>
+            <input type="text" v-fbind:value="n">
+            <!-- 全局指令 对象-->
+            <input type="text" v-fbind2:value="n">
+        </div>
+        <script>
+            Vue.config.productionTip = false;// 阻止vue在启动时生成生产提示
+
+            // 全局指令 函数
+            Vue.directive('big2',function(element,binding){
+                console.log(this);//注意： 此处的this是Window 
+                console.log(element);//当前元素
+                console.log(binding);//当前元素的值
+                element.innerText = binding.value * 10
+            })
+            // 全局指令 对象
+            Vue.directive('fbind2',{
+                // 指令与元素成功绑定时（一上来）
+                bind(element,binding){
+                    console.log(this);//Window 
+                    console.log(element);
+                    console.log(binding);
+                    element.value = binding.value;
+                },
+                // 指令所在元素被插入页面时
+                inserted(element,binding){
+                    console.log(element);
+                    console.log(binding);
+                    element.focus();
+                },
+                // 指令所在的模板被重新解析时
+                update(element,binding){
+                    console.log(element);
+                    console.log(binding);
+                    element.value = binding.value;
+                    element.focus();
+                }
+            })
+
+            new Vue({
+                el:'#root',
+                data:{
+                   name:'钢铁侠',
+                   n:1
+                },
+                // 局部指令
+                directives: {
+                    // 局部指令 函数
+                    // big函数何时会被调用？1.指令与元素成功绑定时（一上来）2.指令所在的模板被重新解析时
+                    big(element,binding){
+                        console.log(this);//注意： 此处的this是Window 
+                        console.log(element);//当前元素
+                        console.log(binding);//当前元素的值
+                        element.innerText = binding.value * 10
+                    },
+                    // v-big-number 完整写法
+                    // 'big-number':function(element,binding){
+                    //     console.log(element);//当前元素
+                    //     console.log(binding);//当前元素的值
+                    //     element.innerText = binding.value * 10
+                    // },
+                    // v-big-number 简写
+                    'big-number'(element,binding){
+                        console.log(element);//当前元素
+                        console.log(binding);//当前元素的值
+                        element.innerText = binding.value * 10
+                    },
+                    // 局部指令 对象
+                    fbind:{
+                        // 指令与元素成功绑定时（一上来）
+                        bind(element,binding){
+                            console.log(this);//Window 
+                            console.log(element);
+                            console.log(binding);
+                            element.value = binding.value;
+                        },
+                        // 指令所在元素被插入页面时
+                        inserted(element,binding){
+                            console.log(element);
+                            console.log(binding);
+                            element.focus();
+                        },
+                        // 指令所在的模板被重新解析时
+                        update(element,binding){
+                            console.log(element);
+                            console.log(binding);
+                            element.value = binding.value;
+                            element.focus();
+                        }
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            // 源数据
+            let person = {
+                name:'张三',
+                age:18
+            }
+
+            // Proxy 模拟Vue3中的实现响应式   第一个参数：要代理的对象
+            // Reflect 反射对象  来自window
+            let p = new Proxy(person,{
+                // 读 
+                get(target,propName){
+                    console.log(`有人读取了p身上的${propName}属性`,target,propName);
+                    // return target[propName]
+                    return Reflect.get(target,propName)
+                },
+                // 改 / 增
+                set(target,propName,value){
+                    console.log(`有人修改了p身上的${propName}属性，要去修改界面了`,target,propName,value);
+                    // target[propName] = value
+                    Reflect.set(target,propName,value)
+                },
+                // 删
+                deleteProperty(target,propName){
+                    console.log(`有人删除了p身上的${propName}属性`,target,propName);
+                    // return delete target[propName]
+                    return Reflect.deleteProperty(target,propName)
+                }
+            })
+        </script>
+    </body>
+</html>
+
+<!-- 
+    Vue3的响应式
+        通过Proxy(代理)：拦截对象中任意属性的变化，包括：属性值得读写、属性的添加、属性的删除等
+        通过Reflect(反射)：对被代理对象的属性进行操作
+
+            new Proxy(data,{
+                // 拦截读取属性值
+                get(target,prop){
+                    return Reflect.get(target,prop)
+                }
+                // 拦截设置属性值或添加新属性
+                set(target,prop,value){
+                    return Reflect.set(target,prop,value)
+                }
+                // 拦截删除属性
+                deleteProperty(target,prop){
+                    return Reflect.deleteProperty(target,prop)
+                }
+            })
+
+
+
+
+
+ -->

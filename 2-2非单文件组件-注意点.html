@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- 引入VUE -->
+        <script src="./js/vue.js"></script>
+    </head>
+    <body>
+        <!-- 
+            注意点：
+                1.关于组件名：
+                    1.一个单词组成：
+                        第一种写法（首字母小写）：school
+                        第二种写法（首字母大写）：School
+                    2.多个单词组成：
+                        第一种写法（kebab-case）: my-school
+                        第二种写法（KebabCase）: MySchool(需要vue脚手架支持)
+                    备注：
+                        1.组件名尽可能回避HTML中已有的元素名称、例如：h2 H2 都不行
+                        2.可以使用name配置项指定组件在开发者工具中呈现的名字
+                2.关于组件标签
+                    第一种写法：<school></school>
+                    第二种写法：<school/>
+                    备注：不用使用脚手架时，<school/>会导致后续组件不能渲染
+                3.一个简写方式
+                    const school = Vue.extend(options)  可简写为： const school = options
+         -->
+        <div id="root">
+            <school></school>
+            <!-- <school/> -->
+            <Student></Student>
+            <ni-hao></ni-hao>
+            <haha></haha>
+        </div>
+        <script>
+            Vue.config.productionTip = false;// 阻止vue在启动时生成生产提示
+
+            const school = Vue.extend({
+                name:'xuexiao',
+                template:`
+                    <div>
+                        <h2>学校名字：{{schoolName}}</h2>
+                        <h2>学校地址：{{schoolAddress}}</h2>
+                    </div>
+                `,
+                data() {
+                    return {
+                        schoolName:'清华',
+                        schoolAddress:'北京'
+                    }
+                }
+            })
+            const Student = Vue.extend({
+                template:`
+                    <div>
+                        <h2>学生名字：{{studentName}}</h2>
+                        <h2>学生年龄：{{studentAge}}</h2>
+                    </div>
+                `,
+                data() {
+                    return {
+                        studentName:'张三',
+                        studentAge:18
+                    }
+                }
+            })
+
+            const niHao = Vue.extend({
+                template:`
+                    <div>
+                        <h2>你好呀：{{nihao}}</h2>
+                    </div>
+                `,
+                data() {
+                    return {
+                        nihao:'你好'
+                    }
+                }
+            })
+
+            // 简写
+            const haha = {
+                name:'heihei',
+                template:`
+                    <div>
+                        <h2>你好呀：{{haha}}</h2>
+                    </div>
+                `,
+                data() {
+                    return {
+                        haha:'哈哈'
+                    }
+                }
+            }
+
+            new Vue({
+                el:'#root',
+                data:{
+
+                },
+                components:{
+                    school,
+                    Student,
+                    'ni-hao':niHao,
+                    haha //简写里面没有下extend  在这里vue会自动调extend
+                }
+            })
+        </script>
+    </body>
+</html>

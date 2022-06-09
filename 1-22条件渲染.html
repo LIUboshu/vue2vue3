@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title></title>
+		<!-- 引入VUE -->
+        <script src="./js/vue.js"></script>
+	</head>
+	<body>
+		<!-- 
+			条件渲染:
+				1.v-if   写法
+					v-if='表达式'
+					v-else-if='表达式'
+					v-else
+					适用于:切换频率较低的场景
+					特点:不展示的DOM元素直接移除
+					注意:v-if可以和v-else-if,v-else一起使用,但要求结构不能被"打断"
+				2.v-show  写法:
+					v-show='表达式'
+					适用于:切换频率较高的场景
+					特点:不展示的DOM元素不会被移除,仅仅是使用的样式隐藏
+				3.备注:使用v-if时,元素无法获取到,而使用v-show一定可以获取到
+		 -->
+		<div id="root">
+			<h1>当前的n值是:{{n}}</h1>
+			<button type="button" @click="n++">点击n+1</button>
+			<!-- 使用v-show做条件渲染 -->
+			<h1 v-show="true">欢迎你来到{{country}}</h1>
+			<h1 v-show="1===1">欢迎你来到{{country}}</h1>
+			
+			<!-- 使用v-if做条件渲染 -->
+			<h1 v-if="true">欢迎你来到{{country}}</h1>
+			<h1 v-if="1===1">欢迎你来到{{country}}</h1>
+			<hr >
+			<h1 v-show="n === 1">欢迎你来到{{country}} n是1</h1>
+			<h1 v-show="n === 2">欢迎你来到{{country}} n是2</h1>
+			<h1 v-show="n === 3">欢迎你来到{{country}} n是3</h1>
+			<hr >
+			<!-- v-else和 v-else-if  -->
+			<h1 v-if="n === 1">欢迎你来到{{country}} n是1</h1>
+			<h1 v-else-if="n === 2">欢迎你来到{{country}} n是2</h1>
+			<h1 v-else-if="n === 3">欢迎你来到{{country}} n是3</h1>
+			<h1 v-else>欢迎你来到{{country}} n不等于1,2,3的时候显示</h1>
+			<hr >
+			<!-- v-if和template的配合使用 -->
+			<template v-if="n === 1">
+				<h2>你好</h2>
+				<h2>{{country}}</h2>
+			</template>
+		</div>
+		<script type="text/javascript">
+			const vm = new Vue({
+				el:"#root",
+				data:{
+					country:'中国',
+					n:0
+				}
+			})
+		</script>
+	</body>
+</html>

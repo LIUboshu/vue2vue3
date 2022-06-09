@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- 引入VUE -->
+        <script src="./js/vue.js"></script>
+        <style>
+            #div{
+                width: 200px;
+                height: 200px;
+                background-color: red;
+                padding: 6%;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 
+            Vue中的事件修饰符
+                prevent：阻止默认事件（常用）
+                stop：阻止事件冒泡（常用）
+                once：事件只触发一次（常用）
+
+                capture：使用事件的捕获模式
+                self：只有event.target是当前操作的元素是才触发事件
+                passive:事件的默认行为立即执行，无需等待事件回调执行事件
+         -->
+        <div id="root">
+            <h1>欢迎来到{{country}}！！！</h1>
+            <!-- .prevent 阻止默认事件  事件修饰符   -->
+            <a href="https://www.baidu.com" @click.prevent="showInfo">百度</a>
+
+            <div id="div" @click="showInfo">
+                <!-- stop：阻止事件冒泡（常用） -->
+                <button @click.stop="showInfo">点击按钮</button>
+            </div>
+            <!-- once：事件只触发一次（常用） -->
+            <button @click.once="showInfo">点击按钮</button>
+        </div>
+        <script>
+            Vue.config.productionTip = false;// 阻止vue在启动时生成生产提示
+            const vm = new Vue({
+                el:'#root',
+                data:{
+                    country:'中国'
+                },
+                methods: {
+                    showInfo(ev){
+                        // ev.preventDefault();// 阻止默认事件
+                        // ev.stopPropagation();// 阻止事件冒泡
+                        alert('你好，中国')
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
